@@ -33,7 +33,7 @@
 		foreach ($ids as $name => $id) {
 			foreach ($roles as $array) {
 				if ($name == $array['Name']) {
-					$ranks[$array['Rank']] = $id; // Iterate through 
+					$ranks[$array['Rank']] = $id; // Iterate through roles and match them with the correct ID
 				}
 			}
 		}
