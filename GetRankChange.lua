@@ -15,6 +15,7 @@ So in case you're making multiple rank changes you'll still get the correct rank
 
 ]]
 
+local group = 0
 GetRankInGroup = function(userId,group,plr)
     return tonumber(game:GetService'HttpService':GetAsync(string.format('http://www.roproxy.tk/Game/LuaWebService/HandleSocialRequest.ashx?method=GetGroupRank&playerid=%d&groupid=%d',userId,group)):match'<.*>(.*)<.*>') or plr:GetRankInGroup(group)
 end
