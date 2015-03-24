@@ -2,6 +2,8 @@
 	/*
 	
 	NOT MADE BY ME.
+	Source: http://php.net/manual/en/function.http-parse-headers.php#112917
+	
 	If you are getting the X-CSRF token using pecl_http http_parse_headers function, do:
 	http_parse_headers['X-Csrf-Token'];
 	With this it's: 
