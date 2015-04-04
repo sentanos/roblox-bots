@@ -6,8 +6,7 @@
 	
 	*/
 	include_once 'http_parse_headers.php'; // Requires http_parse_headers
-	function getToken($cookieFile) {
-		$url = 'http://www.roblox.com/groups/api/change-member-rank'; // Change rank url.
+	function getToken($cookieFile,$url='http://www.roblox.com/groups/api/change-member-rank'/* Default to the change rank token, but there are also tokens for other things. */) {
 		$curl = curl_init($url);
 		curl_setopt_array($curl,array(
 			CURLOPT_HEADER => true,
