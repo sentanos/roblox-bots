@@ -8,7 +8,6 @@
 	
 	I'm also trying to not use globals because it's "good practice", so the function accepts A LOT of arguments.
 	*/
-	include_once'Includes/Login.php';
 	include_once'Includes/GetRoles.php'
 	include_once'Includes/http_parse_headers.php';
 	$group = 18; // Change this to your group ID
