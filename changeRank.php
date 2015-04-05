@@ -8,10 +8,9 @@
 	
 	I'm also trying to not use globals because it's "good practice", so the function accepts A LOT of arguments.
 	*/
-	include_once'Includes/GetRoles.php'
 	include_once'Includes/http_parse_headers.php';
 	$group = 18; // Change this to your group ID
-	list($ranks,$roles) = getRoleSets($group);
+	//list($ranks,$roles) = getRoleSets($group);
 	function updateRank($group,$userId,$rank,$xcsrf='',$cookie,$ranks,$roles,$rankLimit=255) {
 		if ($rankLimit && $rankLimit < 255) {
 			$currentRank = (int)simplexml_load_file("http://www.roblox.com/Game/LuaWebService/HandleSocialRequest.ashx?method=GetGroupRank&playerid=$userId&groupid=$group"); // Get user's rank
