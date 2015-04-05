@@ -29,7 +29,7 @@
 		curl_close($curl);
 		$responsearray = json_decode($response,true)['d'];
 		if ($responsearray['IsValid'] == true) {
-			return $response;
+			return $responsearray['Message'];
 		} else {
 			return 'Login Failure! Error: '.$responsearray['Message']; // You can change this to die()
 		}
