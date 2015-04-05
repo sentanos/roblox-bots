@@ -6,7 +6,7 @@
 	Make sure to put the correct details or it will go to captcha and you won't have any easy way of actually solving it.
 	
 	*/
-	function login($cookieFile,$username,$password) {
+	function login($cookie,$username,$password) {
 		$login = array(
 			'userName'        => $username,
 			'password'        => $password,
@@ -22,8 +22,8 @@
 			CURLOPT_HTTPHEADER => array(
 				'Content-Type: application/json; charset=utf-8'	
 			),
-			CURLOPT_COOKIEFILE => $cookieFile,
-			CURLOPT_COOKIEJAR => $cookieFile // Actually save the cookies it's returning!
+			CURLOPT_COOKIEFILE => $cookie,
+			CURLOPT_COOKIEJAR => $cookie // Actually save the cookies it's returning!
 		));
 		$response = curl_exec($curl);
 		curl_close($curl);
