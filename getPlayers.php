@@ -1,6 +1,30 @@
 <?php
+	/*
+	
+	This gets all the usernames and userIds of all users of a specific rank from a specific group (and exports them in json format).
+	It works for the most part, but for some reason will not work with all groups.
+	When trying to use this on specific groups ROBLOX will error on the first request.
+	[LINE 118]
+	
+	For example:
+	/getPlayers.php?group=18&rank=255
+	works
+	
+	/getPlayers.php?group=1101003&rank=255
+	does not work (there is an owner)
+	
+	I debugged forever and couldn't figure it out, only track it down to where it was happening, any help would be appreciated!
+	
+	*/
+
 	//header('Content-type: text/plain');
-	set_time_limit(0);
+	libxml_use_internal_errors(true); // Hide DomDocument parse warnings
+	set_time_limit(0); // May take a while, don't want it to time out!
+	if (isset($_GET['raw']) && $_GET['raw'] == true) {
+		$raw = true;
+	} else {
+		$raw = false;
+	}
 	function getRoleSets($group) {
 		$roles = json_decode(file_get_contents("http://api.roblox.com/groups/$group"),true)['Roles'];
 		$ids = array();
@@ -22,7 +46,6 @@
 		}
 		return $ranks;
 	}
-	$ranks = getRoleSets($group);
 	function getRoleSet($getrank) {
 		global $ranks;
 		foreach($ranks as $rank => $roleset) {
@@ -72,6 +95,7 @@
 	}
 	function getPlayers($rank) {
 		global $group;
+		global $raw;
 		$players = array();
 		$url = "http://www.roblox.com/Groups/group.aspx?gid=$group";
 		$curl = curl_init($url);
@@ -117,7 +141,9 @@
 			));
 			$response = curl_exec($curl);
 		}
-		echo 'Get time: ' . (time()-$start) . ' seconds<br>Players: '. count($players) .'<br><br>';
+		if (!$raw) {
+			echo 'Get time: ' . (time()-$start) . ' seconds<br>Players: '. count($players) .'<br><br>';
+		}
 		return $players;
 	}
 	if (isset($_GET['group'])) {
