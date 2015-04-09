@@ -1,32 +1,6 @@
 <?php
-	error_reporting(E_ALL & ~E_WARNING);
 	//header('Content-type: text/plain');
 	set_time_limit(0);
-	$group = 18;
-	/*$ranks = array(
-		0 => 262,
-		1 => 202,
-		2 => 7202188,
-		3 => 155451,
-		4 => 154905,
-		5 => 125,
-		6 => 3691688,
-		7 => 3691687,
-		8 => 158913,
-		9 => 6900080,
-		10 => 155436,
-		12 => 7488905,
-		13 => 8347557,
-		14 => 7488907,
-		15 => 155871,
-		16 => 7582704,
-		255 => 53
-	);*/
-	/*$ranks = array();
-	$roles = json_decode(file_get_contents("http://www.roblox.com/api/groups/$group/RoleSets/"),true);
-	foreach($roles as $role => $array) {
-		$ranks[$array['Rank']] = $array['ID'];
-	}*/
 	function getRoleSets($group) {
 		$roles = json_decode(file_get_contents("http://api.roblox.com/groups/$group"),true)['Roles'];
 		$ids = array();
@@ -58,8 +32,6 @@
 		}
 	}
 	function getPostArray($html,$preDefined) {
-		//return $preDefined;
-		//substr($response,curl_getinfo($curl,CURLINFO_HEADER_SIZE))
 		$doc = new DOMDocument();
 		$doc->loadHTML($html);
 		$find = new DomXPath($doc);
@@ -104,30 +76,22 @@
 		$url = "http://www.roblox.com/Groups/group.aspx?gid=$group";
 		$curl = curl_init($url);
 		curl_setopt_array($curl,array(
-			CURLOPT_RETURNTRANSFER => true,
-			//CURLOPT_USERAGENT => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.104 Safari/537.36'
+			CURLOPT_RETURNTRANSFER => true
 		));
 		$response = curl_exec($curl);
 		$nextPost = getPostArray(substr($response,curl_getinfo($curl,CURLINFO_HEADER_SIZE)),
 			array(
-				//'ctl00$ScriptManager' => 'ctl00$cphRoblox$rbxGroupRoleSetMembersPane$GroupMembersUpdatePanel|ctl00$cphRoblox$rbxGroupRoleSetMembersPane$dlRolesetList',
 				'__EVENTTARGET' => 'ctl00$cphRoblox$rbxGroupRoleSetMembersPane$dlRolesetList',
-				'ctl00$cphRoblox$rbxGroupRoleSetMembersPane$dlRolesetList' => getRoleSet($rank),
-				//'ctl00$cphRoblox$rbxGroupRoleSetMembersPane$dlUsers_Footer$ctl01$PageTextBox' => '1',
-				//'ctl00$cphRoblox$rbxGroupRoleSetMembersPane$dlUsers_Footer$ctl01$HiddenInputButton' => ''
+				'ctl00$cphRoblox$rbxGroupRoleSetMembersPane$dlRolesetList' => getRoleSet($rank)
 			)
 		);
 		// Set rank to search
-		//curl_close($curl);
-		//$curl = curl_init($url);
-		//die(var_export($nextPost));
 		curl_setopt_array($curl,array(
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_POST => true,
 			CURLOPT_POSTFIELDS => $nextPost
 		));
 		$response = curl_exec($curl);
-		//die($response);
 		$doc = new DOMDocument();
 		$doc->loadHTML($response);
 		$find = new DomXPath($doc);
@@ -137,12 +101,9 @@
 		if (!isset($pages)) {
 			$pages = 1;
 		}
-		//die('Pages: '.$pages);
 		$start = time();
 		for ($i = 1; $i <= $pages; $i++) {
-			//die("i = $i, pages = $pages");
 			$players = getPlayersOnPage($response,$players);
-			//die(var_export($players));
 			$nextPost = getPostArray(substr($response,curl_getinfo($curl,CURLINFO_HEADER_SIZE)),
 				array(
 					'ctl00$ScriptManager' => 'ctl00$cphRoblox$rbxGroupRoleSetMembersPane$GroupMembersUpdatePanel|ctl00$cphRoblox$rbxGroupRoleSetMembersPane$dlUsers_Footer$ctl01$HiddenInputButton',
