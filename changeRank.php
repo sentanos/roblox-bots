@@ -69,7 +69,7 @@
 				return updateRank($username,$password,$group,$userId,$rank,$cookie,$ranks,$roles,$rankLimit,$save); // Would appreciate if someone showed me a better way to do this (not repassing every argument manually).
 			} else */if ($responseCode == 403) { // 403 XCSRF Token Validation Failed - CONVENIENCE!
 				$header = http_parse_headers(substr($response,0,$headerSize));
-				$xcsrf = $header['X-Csrf-Token'];
+				$xcsrf = $header['X-CSRF-TOKEN'];
 				save($save,$xcsrf,$time);
 				return updateRank($username,$password,$group,$userId,$rank,$cookie,$ranks,$roles,$rankLimit,$save);
 			}
