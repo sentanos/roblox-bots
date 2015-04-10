@@ -10,11 +10,26 @@
 	*/
 	include_once 'Includes/http_parse_headers.php';
 	include_once 'Includes/Login.php';
-	function updateRank($username,$password,$group,$userId,$rank,$cookie,$ranks,$roles,$rankLimit=255,$tokenFile='xcsrf.txt') { // OH MY GOD SO MANY ARGUMENTS!
-		if (file_exists($tokenFile)) {
-			$xcsrf = file_get_contents($tokenFile);
+	function updateRank($username,$password,$group,$userId,$rank,$cookie,$ranks,$roles,$rankLimit=255,$save='access.json') { // OH MY GOD SO MANY ARGUMENTS!
+		if (file_exists($save)) {
+			$access = json_decode(file_get_contents($save),true);
+			$xcsrf = $access['XCSRF'];
+			$time = $access['Time'];
 		} else {
 			$xcsrf = '';
+			$time = 0;
+		}
+		if (time()-$time >= 86400) { // Log in and refresh .ROBLOSECURITY daily
+			login($cookie,$username,$password);
+			$time = time();
+		}
+		if (!function_exists('save')) {
+			function save($file,$xcsrf,$time) {
+				file_put_contents($file,json_encode(array(
+					'XCSRF' => $xcsrf,
+					'Time' => $time
+				)));
+			}
 		}
 		/* 
 		
@@ -48,18 +63,20 @@
 		$headerSize = curl_getinfo($curl,CURLINFO_HEADER_SIZE);
 		$responseCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		if ($responseCode != 200) {
-			if ($responseCode == 302) { // 302 Moved temporarily - User is not logged in: Redirect to error page
+			// BELOW 302 DOES NOT WORK AND IS DEPRACATED FOR NOW
+			/*if ($responseCode == 302) { // 302 Moved temporarily - User is not logged in: Redirect to error page
 				login($cookie,$username,$password);
-				return updateRank($username,$password,$group,$userId,$rank,$cookie,$ranks,$roles,$rankLimit,$tokenFile); // Would appreciate if someone showed me a better way to do this (not repassing every argument manually).
-			} else if ($responseCode == 403) { // 403 XCSRF Token Validation Failed - CONVENIENCE!
+				return updateRank($username,$password,$group,$userId,$rank,$cookie,$ranks,$roles,$rankLimit,$save); // Would appreciate if someone showed me a better way to do this (not repassing every argument manually).
+			} else */if ($responseCode == 403) { // 403 XCSRF Token Validation Failed - CONVENIENCE!
 				$header = http_parse_headers(substr($response,0,$headerSize));
-				$xcsrf = $header['X-CSRF-TOKEN'];
-				file_put_contents($tokenFile,$xcsrf);
-				return updateRank($username,$password,$group,$userId,$rank,$cookie,$ranks,$roles,$rankLimit,$tokenFile);
+				$xcsrf = $header['X-Csrf-Token'];
+				save($save,$xcsrf,$time);
+				return updateRank($username,$password,$group,$userId,$rank,$cookie,$ranks,$roles,$rankLimit,$save);
 			}
 		}
 		$response = substr($response,$headerSize);
 		curl_close($curl);
+		save($save,$xcsrf,$time);
 		if (json_decode($response,true)['success'] == false) {
 			return 'Invalid promoting permissions.';
 		} else {
