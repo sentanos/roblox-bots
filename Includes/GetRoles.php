@@ -45,7 +45,6 @@
 		return array($ranks,array_flip($ids));
 	}
 	function getRoleSet($ranks,$rank) {
-		global $ranks;
 		foreach($ranks as $num => $roleset) {
 			if ($rank == $num) {
 				return $roleset;
