@@ -3,8 +3,6 @@
 	
 	RankLimit can be used to restrict people from changing the rank of people who aren't a low rank.
 	
-	I implemented the login and xcsrf getting by using Voiliax's concept - only getting it if it's invalid (much more efficient).
-	
 	I'm also trying to not use globals because it's "good practice", so the function accepts !!*A LOT*!! of arguments.
 	
 	*/
@@ -18,10 +16,6 @@
 		} else {
 			$xcsrf = '';
 			$time = 0;
-		}
-		if (time()-$time >= 86400) { // Log in and refresh .ROBLOSECURITY daily
-			login($cookie,$username,$password);
-			$time = time();
 		}
 		if (!function_exists('save')) {
 			function save($file,$xcsrf,$time) {
