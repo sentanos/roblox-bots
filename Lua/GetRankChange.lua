@@ -13,6 +13,8 @@ The GetRankInGroup function uses a proxy to get the players rank from onlne.
 The reason it does this is because ROBLOX's GetRankInGroup caches.
 So in case you're making multiple rank changes you'll still get the correct rank.
 
+**HttpService must be enabled**
+
 ]]
 
 local group = 0
