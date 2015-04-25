@@ -3,14 +3,34 @@
 	
 	RankLimit can be used to restrict people from changing the rank of people who aren't a low rank.
 	
-	I'm also trying to not use globals because it's "good practice", so the function accepts !!*A LOT*!! of arguments.
+	I implemented the login and xcsrf getting by using Voiliax's concept - only getting it if it's invalid (much more efficient).
 	
-	Update: Function is less independent and cookie updating must be handled outside of it.
+	I'm also trying to not use globals because it's "good practice", so the function accepts !!*A LOT*!! of arguments.
 	
 	*/
 	include_once 'Includes/http_parse_headers.php';
 	include_once 'Includes/Login.php';
-	function updateRank($username,$password,$group,$userId,$rank,$cookie,$ranks,$roles,$rankLimit=255) { // OH MY GOD SO MANY ARGUMENTS!
+	function updateRank($username,$password,$group,$userId,$rank,$cookie,$ranks,$roles,$rankLimit=255,$save='access.json') { // OH MY GOD SO MANY ARGUMENTS!
+		if (file_exists($save)) {
+			$access = json_decode(file_get_contents($save),true);
+			$xcsrf = $access['XCSRF'];
+			$time = $access['Time'];
+		} else {
+			$xcsrf = '';
+			$time = 0;
+		}
+		if (time()-$time >= 86400) { // Log in and refresh .ROBLOSECURITY daily
+			login($cookie,$username,$password);
+			$time = time();
+		}
+		if (!function_exists('save')) {
+			function save($file,$xcsrf,$time) {
+				file_put_contents($file,json_encode(array(
+					'XCSRF' => $xcsrf,
+					'Time' => $time
+				)));
+			}
+		}
 		/* 
 		
 		If you want to increase performance do this:
