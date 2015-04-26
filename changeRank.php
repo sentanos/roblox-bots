@@ -7,23 +7,11 @@
 	
 	*/
 	include_once 'Includes/http_parse_headers.php';
-	include_once 'Includes/Login.php';
-	function updateRank($username,$password,$group,$userId,$rank,$cookie,$ranks,$roles,$rankLimit=255,$save='access.json') { // OH MY GOD SO MANY ARGUMENTS!
+	function updateRank($username,$password,$group,$userId,$rank,$cookie,$ranks,$roles,$rankLimit=255,$save='Private/gxcsrf.txt') { // OH MY GOD SO MANY ARGUMENTS!
 		if (file_exists($save)) {
-			$access = json_decode(file_get_contents($save),true);
-			$xcsrf = $access['XCSRF'];
-			$time = $access['Time'];
+			$xcsrf = file_get_contents($save);
 		} else {
 			$xcsrf = '';
-			$time = 0;
-		}
-		if (!function_exists('save')) {
-			function save($file,$xcsrf,$time) {
-				file_put_contents($file,json_encode(array(
-					'XCSRF' => $xcsrf,
-					'Time' => $time
-				)));
-			}
 		}
 		/* 
 		
@@ -64,13 +52,12 @@
 			} else */if ($responseCode == 403) { // 403 XCSRF Token Validation Failed - CONVENIENCE!
 				$header = http_parse_headers(substr($response,0,$headerSize));
 				$xcsrf = $header['X-CSRF-TOKEN'];
-				save($save,$xcsrf,$time);
+				file_put_contents($save,$xcsrf);
 				return updateRank($username,$password,$group,$userId,$rank,$cookie,$ranks,$roles,$rankLimit,$save);
 			}
 		}
 		$response = substr($response,$headerSize);
 		curl_close($curl);
-		save($save,$xcsrf,$time);
 		if (json_decode($response,true)['success'] == false) {
 			return 'Invalid promoting permissions.';
 		} else {
