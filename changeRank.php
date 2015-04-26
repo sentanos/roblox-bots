@@ -7,7 +7,7 @@
 	
 	*/
 	include_once 'Includes/http_parse_headers.php';
-	function updateRank($group,$userId,$rank,$cookie,$ranks,$roles,$rankLimit=255,$save='Private/gxcsrf.txt') { // OH MY GOD SO MANY ARGUMENTS!
+	function updateRank($group,$userId,$rank,$cookie,$ranks,$roles,$rankLimit=255,$save='../Private/gxcsrf.txt') { // OH MY GOD SO MANY ARGUMENTS!
 		if (file_exists($save)) {
 			$xcsrf = file_get_contents($save);
 		} else {
@@ -53,7 +53,7 @@
 				$header = http_parse_headers(substr($response,0,$headerSize));
 				$xcsrf = $header['X-CSRF-TOKEN'];
 				file_put_contents($save,$xcsrf);
-				return updateRank($username,$password,$group,$userId,$rank,$cookie,$ranks,$roles,$rankLimit,$save);
+				return updateRank($group,$userId,$rank,$cookie,$ranks,$roles,$rankLimit,$save);
 			}
 		}
 		$response = substr($response,$headerSize);
