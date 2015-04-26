@@ -1,7 +1,12 @@
 <?php
-  function handleJoinRequest($username,$choice/*Accept or Decline*/) {
-		global $group;
-		global $cookie;
+	/*
+	
+	This one is longer because ROBLOX doesn't have any type of API for handling join requests.
+	The only way to do it is as a normal user would, by selecting a choice on the group admin page.
+	That also means that you need to input a username instead of a userId (and this is the only case).
+	
+	*/
+	function handleJoinRequest($cookie,$group,$username,$choice/*Accept or Decline - No default here to make sure you know what you're doing*/) {
 		$url = "http://www.roblox.com/My/GroupAdmin.aspx?gid=$group";
 		switch($choice) {
 			case 'Accept':
@@ -48,11 +53,7 @@
 			CURLOPT_COOKIEFILE => $cookie,
 			CURLOPT_COOKIEJAR => $cookie
 		));
-		if (curl_exec($curl)) {
-			curl_close($curl);
-			logAction('Handle Join Request',$username,$choice);
-			return "$username => $choice";
-		}
-		return 'Failure';
+		$text = $choiceNumber==1 ? 'ed' : 'd';
+		return "$username's join request $text.";
 	}
 ?>
