@@ -1,6 +1,6 @@
 <?php
 	include_once 'Includes/http_parse_headers.php';
-	function message($cookie,$xcsrf,$id,$body='None',$subject='None',$save='Private/mxcsrf.txt') {
+	function message($cookie,$id,$subject='None',$body='None',$save='../Private/mxcsrf.txt') {
 		if (file_exists($save)) {
 			$xcsrf = file_get_contents($save);
 		} else {
@@ -32,15 +32,15 @@
 				$header = http_parse_headers(substr($response,0,$headerSize));
 				$xcsrf = $header['X-CSRF-TOKEN'];
 				file_put_contents($save,$xcsrf);
-				return message($cookie,$xcsrf,$id,$body,$subject,$save);
+				return message($cookie,$id,$body,$subject,$save);
 			}
 		}
-		$json = json_decode($response,true)
+		$json = json_decode(substr($response,$headerSize),true);
 		if ($json['success'] == true) {
-			return "Sent message $subject to $id."
+			return "Sent message $subject to $id.";
 		} else {
 			$error = $json['shortMessage'];
-			return "Error sending message $subject to $id: $error"
+			return "Error sending message $subject to $id: $error";
 		}
 	}
 ?>
