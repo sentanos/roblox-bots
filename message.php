@@ -1,6 +1,6 @@
 <?php
 	include_once 'Includes/http_parse_headers.php';
-	function message($cookie,$xcsrf,$id,$body='None',$subject='None',$save='mxcsrf.txt') {
+	function message($cookie,$xcsrf,$id,$body='None',$subject='None',$save='Private/mxcsrf.txt') {
 		if (file_exists($save)) {
 			$xcsrf = file_get_contents($save);
 		} else {
