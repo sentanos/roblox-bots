@@ -5,8 +5,19 @@
 	The only way to do it is as a normal user would, by selecting a choice on the group admin page.
 	That also means that you need to input a username instead of a userId (and this is the only case).
 	
+	EDIT: So apparently ROBLOX now does have a join request API...
+	But you need a join request ID, WHICH YOU CAN ONLY GET FROM THE GROUP ADMIN PAGE ANYWYAS.
+	In fact, it's actually more complicated and long now - two big parts have to be included.
+	Way to go, ROBLOX.
+	
 	*/
-	function handleJoinRequest($cookie,$group,$username,$choice/*Accept or Decline - No default here to make sure you know what you're doing*/) {
+	include_once 'Includes/GetPostArray.php';
+	function handleJoinRequest($cookie,$group,$username,$choice/*Accept or Decline - No default here to make sure you know what you're doing*/,$save='hxcsrf.txt',$requestId=-1) {
+		if (file_exists($save)) {
+			$xcsrf = file_get_contents($save);
+		} else {
+			$xcsrf = '';
+		}
 		$url = "http://www.roblox.com/My/GroupAdmin.aspx?gid=$group";
 		switch($choice) {
 			case 'Accept':
@@ -18,42 +29,68 @@
 			default:
 				die('Invalid choice.');
 		}
-		$curl = curl_init($url);
+		if ($requestId === -1) { // This is so that if the function is being re called with the request ID already received you don't go through the whole process again (because it takes up a lot of time)
+			$curl = curl_init($url);
+			curl_setopt_array($curl,array(
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_COOKIEFILE => $cookie,
+				CURLOPT_COOKIEJAR => $cookie
+			));
+			$response = curl_exec($curl);
+			$nextPost = getPostArray(substr($response,curl_getinfo($curl,CURLINFO_HEADER_SIZE)),
+				array(
+					'ctl00$ctl00$cphRoblox$cphMyRobloxContent$JoinRequestsSearchBox' => $username,
+					'ctl00$ctl00$cphRoblox$cphMyRobloxContent$JoinRequestsSearchButton' => 'Search'	
+				)
+			);
+			curl_close($curl);
+			$curl = curl_init($url);
+			curl_setopt_array($curl,array(
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_POST => true,
+				CURLOPT_POSTFIELDS => $nextPost,
+				CURLOPT_COOKIEFILE => $cookie,
+				CURLOPT_COOKIEJAR => $cookie
+			));
+			$response = curl_exec($curl);
+			$doc = new DOMDocument();
+			$doc->loadHTML($response);
+			$find = new DomXPath($doc);
+			$nodes = $find->query("//span[contains(@class,'btn-control btn-control-medium accept-join-request')][1]");
+			foreach($nodes as $node) {
+				$requestId = $node->getAttribute('data-rbx-join-request');
+			}
+		}
+		$curl = curl_init('http://www.roblox.com/group/handle-join-request');
+		$post = array(
+			'groupJoinRequestId' => $requestId,
+			'accept' => $choiceNumber==1 ? true : false
+		);
 		curl_setopt_array($curl,array(
-			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_POST => true,
+			CURLOPT_POSTFIELDS => json_encode($post),
+			CURLOPT_HEADER => true,
+			CURLOPT_HTTPHEADER => array(                                                           
+				"X-CSRF-TOKEN: $xcsrf",
+				'Content-Length: '.strlen(json_encode($post)),
+				'Content-Type: application/json; charset=UTF-8'
+			),
 			CURLOPT_COOKIEFILE => $cookie,
-			CURLOPT_COOKIEJAR => $cookie
+			CURLOPT_COOKIEJAR => $cookie,
+			CURLOPT_RETURNTRANSFER => true
 		));
 		$response = curl_exec($curl);
-		curl_close($curl);
-		$nextPost = getPostArray(substr($response,curl_getinfo($curl,CURLINFO_HEADER_SIZE)),
-			array(
-				'ctl00$ctl00$cphRoblox$cphMyRobloxContent$JoinRequestsSearchBox' => $username,
-				'ctl00$ctl00$cphRoblox$cphMyRobloxContent$JoinRequestsSearchButton' => 'Search'	
-			)
-		);
-		$curl = curl_init($url);
-		curl_setopt_array($curl,array(
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_POST => true,
-			CURLOPT_POSTFIELDS => $nextPost,
-			CURLOPT_COOKIEFILE => $cookie,
-			CURLOPT_COOKIEJAR => $cookie
-		));
-		$response = curl_exec($curl);
-		$nextPost = getPostArray(substr($response,curl_getinfo($curl,CURLINFO_HEADER_SIZE)),
-			array(
-				'ctl00$ctl00$cphRoblox$cphMyRobloxContent$lvGroupJoinRequests$ctrl0$ctl00$Button'.$choiceNumber => $choice	
-			)
-		);
-		curl_setopt_array($curl,array(
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_POST => true,
-			CURLOPT_POSTFIELDS => $nextPost,
-			CURLOPT_COOKIEFILE => $cookie,
-			CURLOPT_COOKIEJAR => $cookie
-		));
+		$headerSize = curl_getinfo($curl,CURLINFO_HEADER_SIZE);
+		$responseCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+		if ($responseCode != 200) {
+			if ($responseCode == 403) { // 403 XCSRF Token Validation Failed
+				$header = http_parse_headers2(substr($response,0,$headerSize));
+				$xcsrf = $header['X-CSRF-TOKEN'];
+				file_put_contents($save,$xcsrf);
+				return handleJoinRequest($cookie,$group,$username,$choice,$save,$requestId);
+			}
+		}
 		$text = $choiceNumber==1 ? 'ed' : 'd';
-		return "$username's join request $text.";
+		return "$choice$text $username's join request.";
 	}
 ?>
