@@ -48,7 +48,7 @@
 				$header = http_parse_headers(substr($response,0,$headerSize));
 				$xcsrf = $header['X-CSRF-TOKEN'];
 				file_put_contents($save,$xcsrf);
-				return exile($cookie,$group,$senderRoleSetId,$userId,$deletePosts,$save=);
+				return exile($cookie,$group,$senderRoleSetId,$userId,$deletePosts,$save);
 			}
 		}
 		return "Exiled $userId, ".$deletePosts ? 'deleted' : 'did not delete'.' posts.';
