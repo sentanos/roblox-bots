@@ -13,13 +13,16 @@
 			'recipientid' => $id,
 			'cacheBuster' => time()
 		);
+		/* The reason it's sent in json is because I ran into problems where the body and subject would be switched in some cases when I wasn't using it
+		I'm not actually sure if sending it in json makes a difference but I think it's better than just sending it a urlencoded array*/
 		curl_setopt_array($curl,array(
 			CURLOPT_HEADER => true,
 			CURLOPT_HTTPHEADER => array(                                                          
-				"X-CSRF-TOKEN: $xcsrf"
+				"X-CSRF-TOKEN: $xcsrf",
+				'Content-Type: application/json'
 			),
 			CURLOPT_POST => true,
-			CURLOPT_POSTFIELDS => $send,
+			CURLOPT_POSTFIELDS => json_encode($send),
 			CURLOPT_COOKIEFILE => $cookie,
 			CURLOPT_COOKIEJAR => $cookie,
 			CURLOPT_RETURNTRANSFER => true
