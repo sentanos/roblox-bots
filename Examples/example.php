@@ -1,7 +1,7 @@
 <?php
 	// This is simply an example file so that you know how to work everything (specifically logging in and cookies).
-	include_once dirname(dirname(__FILE__)).'/Includes/GetRoles.php';
-	include_once dirname(dirname(__FILE__)).'/Includes/Login.php';
+	include_once dirname(dirname(__FILE__)).'/Includes/getRoles.php';
+	include_once dirname(dirname(__FILE__)).'/Includes/login.php';
 	include_once dirname(dirname(__FILE__)).'/changeRank.php';
 	libxml_use_internal_errors(true); // Hide DOMDocument errors (though your errors should be turned off anyways)
 	$group = 18; // Change this to your group ID
