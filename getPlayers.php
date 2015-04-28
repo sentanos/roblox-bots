@@ -4,7 +4,7 @@
 	This gets all the usernames and userIds of all users of a specific rank from a specific group (and exports them in json format).
 	It works for the most part, but for some reason will not work with all groups.
 	When trying to use this on specific groups ROBLOX will error on the first request.
-	[LINE 78]
+	[LINE 72]
 	
 	For example:
 	/getPlayers.php?group=18&rank=255
