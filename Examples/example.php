@@ -3,7 +3,7 @@
 	include_once dirname(dirname(__FILE__)).'/Includes/getRoles.php';
 	include_once dirname(dirname(__FILE__)).'/Includes/login.php';
 	include_once dirname(dirname(__FILE__)).'/changeRank.php';
-	libxml_use_internal_errors(true); // Hide DOMDocument errors (though your errors should be turned off anyways)
+	libxml_use_internal_errors(true); // Hide DOMDocument warnings (though your errors should be turned off anyways)
 	$group = 18; // Change this to your group ID
 	$cookieTime = dirname(dirname(__FILE__)).'/Private/cookieTime.txt';
 	if (!file_exists($cookieTime)) {
