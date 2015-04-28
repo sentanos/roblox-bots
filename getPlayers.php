@@ -18,8 +18,8 @@
 	*/
 
 	//header('Content-type: text/plain');
-	include_once 'Includes/GetRoles.php';
-	include_once 'Includes/GetPostArray.php';
+	include_once 'Includes/getRoles.php';
+	include_once 'Includes/getPostArray.php';
 	libxml_use_internal_errors(true); // Hide DomDocument parse warnings
 	set_time_limit(0); // May take a while, don't want it to time out!
 	if (isset($_GET['raw']) && $_GET['raw'] == true) {
