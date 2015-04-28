@@ -22,11 +22,7 @@
 	include_once 'Includes/getPostArray.php';
 	libxml_use_internal_errors(true); // Hide DomDocument parse warnings
 	set_time_limit(0); // May take a while, don't want it to time out!
-	if (isset($_GET['raw']) && $_GET['raw'] == true) {
-		$raw = true;
-	} else {
-		$raw = false;
-	}
+	$raw = isset($_GET['raw']) && $_GET['raw'] ? true : false;
 	function nextPage($curl,$response) {
 		$nextPost = getFullPostArray(substr($response,curl_getinfo($curl,CURLINFO_HEADER_SIZE)),
 			array(
@@ -53,9 +49,7 @@
 		}
 		return $array;
 	}
-	function getPlayers($rank) {
-		global $group;
-		global $raw;
+	function getPlayers($raw,$group,$rank) {
 		$players = array();
 		$url = "http://www.roblox.com/Groups/group.aspx?gid=$group";
 		$curl = curl_init($url);
@@ -115,10 +109,10 @@
 		$ranks = getRoleSets($_GET['getAll']);
 		$all = array();
 		foreach ($ranks as $rank=>$id) {
-			$all = array_merge($all,getPlayers($rank));
+			$all = array_merge($all,getPlayers($raw,$group,$rank));
 		}
 		echo json_encode($all);
 	} else if (isset($_GET['rank'])) {
-		echo json_encode(getPlayers($_GET['rank']));
+		echo json_encode(getPlayers($raw,$group,$_GET['rank']));
 	}
 ?>
