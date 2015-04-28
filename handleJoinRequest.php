@@ -13,11 +13,7 @@
 	*/
 	include_once 'Includes/getPostArray.php';
 	function handleJoinRequest($cookie,$group,$username,$choice/*Accept or Decline - No default here to make sure you know what you're doing*/,$save='hxcsrf.txt',$requestId=-1) {
-		if (file_exists($save)) {
-			$xcsrf = file_get_contents($save);
-		} else {
-			$xcsrf = '';
-		}
+		$xcsrf = file_exists($save) ? file_get_contents($save) : '';
 		$url = "http://www.roblox.com/My/GroupAdmin.aspx?gid=$group";
 		switch($choice) {
 			case 'Accept':
