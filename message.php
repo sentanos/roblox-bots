@@ -1,6 +1,6 @@
 <?php
 	include_once 'Includes/http_parse_headers.php';
-	function message($cookie,$id,$subject,$body,$save='../Private/mxcsrf.txt') {
+	function message($cookie,$id,$subject='None',$body='None',$save='../Private/mxcsrf.txt') {
 		$xcsrf = file_exists($save) ? file_get_contents($save) : '';
 		$curl = curl_init('http://www.roblox.com/messages/send');
 		$send = array(
@@ -28,7 +28,7 @@
 				$header = http_parse_headers(substr($response,0,$headerSize));
 				$xcsrf = $header['X-CSRF-TOKEN'];
 				file_put_contents($save,$xcsrf);
-				return message($cookie,$id,$body,$subject,$save);
+				return message($cookie,$id,$subject,$body,$save);
 			}
 		}
 		$json = json_decode(substr($response,$headerSize),true);
