@@ -1,6 +1,6 @@
 <?php
 	include_once 'Includes/http_parse_headers.php';
-	function message($cookie,$id,$subject='None',$body='None',$save='../Private/mxcsrf.txt') {
+	function message($cookie,$id,$subject,$body,$save='../Private/mxcsrf.txt') {
 		$xcsrf = file_exists($save) ? file_get_contents($save) : '';
 		$curl = curl_init('http://www.roblox.com/messages/send');
 		$send = array(
@@ -9,16 +9,13 @@
 			'recipientid' => $id,
 			'cacheBuster' => time()
 		);
-		/* The reason it's sent in json is because I ran into problems where the body and subject would be switched in some cases when I wasn't using it
-		I'm not actually sure if sending it in json makes a difference but I think it's better than just sending it a urlencoded array*/
 		curl_setopt_array($curl,array(
 			CURLOPT_HEADER => true,
 			CURLOPT_HTTPHEADER => array(                                                          
-				"X-CSRF-TOKEN: $xcsrf",
-				'Content-Type: application/json'
+				"X-CSRF-TOKEN: $xcsrf"
 			),
 			CURLOPT_POST => true,
-			CURLOPT_POSTFIELDS => json_encode($send),
+			CURLOPT_POSTFIELDS => $send,
 			CURLOPT_COOKIEFILE => $cookie,
 			CURLOPT_COOKIEJAR => $cookie,
 			CURLOPT_RETURNTRANSFER => true
@@ -35,7 +32,7 @@
 			}
 		}
 		$json = json_decode(substr($response,$headerSize),true);
-		if ($json['success'] == true) {
+		if ($json['success']) {
 			return "Sent message $subject to $id.";
 		} else {
 			$error = $json['shortMessage'];
