@@ -81,7 +81,7 @@
 		$responseCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		if ($responseCode != 200) {
 			if ($responseCode == 403) { // 403 XCSRF Token Validation Failed
-				$header = http_parse_headers2(substr($response,0,$headerSize));
+				$header = http_parse_headers(substr($response,0,$headerSize));
 				$xcsrf = $header['X-CSRF-TOKEN'];
 				file_put_contents($save,$xcsrf);
 				return handleJoinRequest($cookie,$group,$username,$choice,$save,$requestId);
