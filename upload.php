@@ -8,7 +8,7 @@
 	
 	This returns assetVersionId, so if you're trying to put the model get the return of the function and do:
 	game:GetService'InsertService':LoadAssetVersion(assetVersionId) -- returns the model
-	
+	 
 	*/
 	function upload($cookie,$asset,$data,$local = false) {
 		if ($local) {
