@@ -7,6 +7,7 @@
 	
 	*/
 	include_once 'Includes/http_parse_headers.php';
+	include_once 'Includes/misc.php';
 	function updateRank($group,$userId,$rank,$cookie,$ranks,$roles,$rankLimit=255,$save='../Private/gxcsrf.txt') { // OH MY GOD SO MANY ARGUMENTS!
 		$xcsrf = file_exists($save) ? file_get_contents($save) : '';
 		/* 
@@ -18,7 +19,7 @@
 			This doesn't actually slow it down that much at all, but when changing ranks **IN BULK** you will be making a lot of requests.
 			
 		*/
-		$currentRank = (int)simplexml_load_file("http://www.roblox.com/Game/LuaWebService/HandleSocialRequest.ashx?method=GetGroupRank&playerid=$userId&groupid=$group");
+		$currentRank = getRankInGroup($userId,$group);
 		if ($rankLimit && $rankLimit < 255) {
 			if ($rank > $rankLimit || $currentRank > $rankLimit) { // Check if the rank you are trying to change them to and their rank abide to the rank limit
 				return "Settings restrict the system from changing any rank over $rankLimit.";
