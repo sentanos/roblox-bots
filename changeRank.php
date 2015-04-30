@@ -8,7 +8,7 @@
 	*/
 	include_once 'Includes/http_parse_headers.php';
 	include_once 'Includes/misc.php';
-	function updateRank($group,$userId,$rank,$cookie,$ranks,$roles,$rankLimit=255,$save='./Private/gxcsrf.txt') { // OH MY GOD SO MANY ARGUMENTS!
+	function updateRank($group,$userId,$rank,$cookie,$ranks,$roles,$rankLimit=255,$save='../Private/gxcsrf.txt') { // OH MY GOD SO MANY ARGUMENTS!
 		$xcsrf = file_exists($save) ? file_get_contents($save) : '';
 		/* 
 		
