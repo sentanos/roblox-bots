@@ -14,7 +14,7 @@
 	
 	*/
 	include_once 'Includes/http_parse_headers.php';
-	function exile($cookie,$group,$senderRoleSetId,$userId,$deletePosts = false,$save='./Private/excsrf.txt') {
+	function exile($cookie,$group,$senderRoleSetId,$userId,$deletePosts = false,$save='../Private/excsrf.txt') {
 		$xcsrf = file_exists($save) ? file_get_contents($save) : '';
 		$curl = curl_init('http://www.roblox.com/My/Groups.aspx/ExileUserAndDeletePosts');
 		$post = array(
