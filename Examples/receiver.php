@@ -1,6 +1,14 @@
 <?php
-  /**/
-	if (!$_GET || !array_key_exists('key',$_GET) || $_GET['key'] != 'GET_KEY') {
+	/*
+	Use in conjunction with send.lua.
+	For more instructions on usage read the instructions in the parent folder's README.
+	
+	To use this move it out of the entire folder.
+	Put your own get key and post key and put those in your ROBLOX sending file.
+	*/
+	$getKey = '';
+	$postKey = '';
+	if (!$_GET || !array_key_exists('key',$_GET) || $_GET['key'] != $getKey) {
 		die('FAILURE: Incorrect/missing validation key.');
 	}
 	$base = './roblox-bots-master';
@@ -9,6 +17,7 @@
 	include_once $base.'/Includes/getPostData.php';
 	include_once $base.'/changeRank.php';
 	include_once $base.'/shout.php';
+	// Remember to include other functions if you want to use them!
 	libxml_use_internal_errors(true); // Hide DOMDocument warnings (though your errors should be turned off anyways)
 	$group = 18; // Change this to your group ID
 	$cookieTime = $base.'/Private/cookieTime.txt';
@@ -21,7 +30,7 @@
 		file_put_contents($cookieTime,time());
 	}
 	$data = getPostData(true);
-	if (!$data || !array_key_exists('Validate',$data) || $data['Validate'] != 'POST_KEY') {
+	if (!$data || !array_key_exists('Validate',$data) || $data['Validate'] != $postKey) {
 		die('FAILURE: Incorrect/missing validation key.');
 	}
 	switch($data['Action']) {
