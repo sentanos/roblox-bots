@@ -4,6 +4,7 @@ local GETKey = '' -- Match with get key on your php file
 -- Example: baseURL/receiver.php?key=GETKey
 -- {"Validate":POSTKey ...}
 
+-- Action and parameters are based on what you put in the receiver php file.
 local send = function(sender,action,parameters)
 	local array = {
 		Validate = POSTKey,
@@ -14,3 +15,7 @@ local send = function(sender,action,parameters)
 	}
 	return game:GetService'HttpService':PostAsync(string.format('%s/receiver.php?key=%s',baseURL,GETKey),game:GetService'HttpService':JSONEncode(array))
 end
+
+send(game.Players.Froast,'setRank',{2470023,13}) -- MAKE SURE TO PUT PARAMETERS IN AN ARRAY, EVEN IF THERE IS ONLY ONE
+-- If you want to do it for an offline player:
+send({userId=2470023},'shout',{'KILLER IS BAD'})
