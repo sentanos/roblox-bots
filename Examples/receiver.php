@@ -4,6 +4,7 @@
 	For more instructions on usage read the instructions in the parent folder's README.
 	
 	To use this move it out of the entire folder.
+	(If you want to change it to be used from inside this folder change base to '..')
 	Put your own get key and post key and put those in your ROBLOX sending file.
 	*/
 	$getKey = '';
