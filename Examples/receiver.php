@@ -36,10 +36,10 @@
 	switch($data['Action']) {
 		case 'setRank':
 			list($ranks,$roles) = getRoleSets($group);
-			echo updateRank($data,$group,$data['Parameter1'],$data['Parameter2'],$cookie,$ranks,$roles,9,$base.'/Private/gxcsrf.txt');
+			echo updateRank($group,$data['Parameter1'],$data['Parameter2'],$cookie,$ranks,$roles,9,$base.'/Private/gxcsrf.txt');
 			break;
 		case 'shout':
-			echo shout($data,$cookie,$group,$data['Parameter1']);
+			echo shout($cookie,$group,$data['Parameter1']);
 			break;
 		default:
 			die('No action!');
