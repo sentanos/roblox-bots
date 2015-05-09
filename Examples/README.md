@@ -6,7 +6,7 @@ This example can receive requests sent by send.lua. Here is a step by step for r
 3. Go to roblox-bots-master/Examples and move receiver.php to your root folder (out of roblox-bots-master).
 4. Configure the username, password, get key, and post key in receiver.php
 5. Configure the file in roblox-bots-master/Lua/send.lua with the same get key and post key, including your server URL.
-6. 
+ 
 (The get key and post key are basically passwords for your API, don't want people accessing your group, right?)
 
 Once you've done that you can use the send function in your ROBLOX game to execute commands on the server!
