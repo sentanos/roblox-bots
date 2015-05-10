@@ -6,7 +6,8 @@
 		curl_setopt_array($curl,array(
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_COOKIEFILE => $cookie,
-			CURLOPT_COOKIEJAR => $cookie
+			CURLOPT_COOKIEJAR => $cookie,
+			CURLOPT_FOLLOWLOCATION => true
 		));
 		$response = curl_exec($curl);
 		$nextPost = getPostArray(substr($response,curl_getinfo($curl,CURLINFO_HEADER_SIZE)),
@@ -19,7 +20,6 @@
 		$curl = curl_init($url);
 		curl_setopt_array($curl,array(
 			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_FOLLOWLOCATION => true,
 			CURLOPT_POST => true,
 			CURLOPT_POSTFIELDS => $nextPost,
 			CURLOPT_COOKIEFILE => $cookie,
