@@ -5,7 +5,7 @@
 	
 	I want to give a really special thanks to Casualist for helping me fix a critical bug that occured with certain groups.
 	The first request would error but ONLY FOR CERTAIN GROUPS, which is what threw me off so much. I didn't know what would be different on different group pages (I'm still not sure)
-	With the help of Casualist's working bot I tracked the problem down to a SINGLE EXTRA INPUT that was being picked up by getFullPostArray (It also requires a UserAgent).
+	With the help of Casualist's working bot I tracked the problem down to a SINGLE EXTRA INPUT that was being picked up by getFullPostArray.
 	The reason it exists on some pages and not others I still do not know.
 	
 	I was also able to implement delta downloading using his example so that it wouldn't be redownloading the entire page every request, just the stuff that changed.
@@ -84,7 +84,6 @@
 		curl_setopt_array($curl,array(
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_POST => true,
-			CURLOPT_USERAGENT => 'Mozilla', // For some reason I have to do this...
 			CURLOPT_POSTFIELDS => $nextPost
 		));
 		$response = curl_exec($curl);
