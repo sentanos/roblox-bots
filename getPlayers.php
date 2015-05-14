@@ -14,7 +14,6 @@
 		/getPlayers.php?getAll=6079&limit=100&raw=false
 		[with whatever parameters you'd like]
 	
-	
 	I want to give a really special thanks to Casualist for helping me fix a critical bug that occured with certain groups.
 	The first request would error but ONLY FOR CERTAIN GROUPS, which is what threw me off so much. I didn't know what would be different on different group pages (I'm still not sure)
 	With the help of Casualist's working bot I tracked the problem down to a SINGLE EXTRA INPUT that was being picked up by getFullPostArray.
