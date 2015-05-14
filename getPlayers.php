@@ -4,7 +4,6 @@
 	This gets all the usernames and userIds of all users of a specific rank from a specific group (and exports them in json format).
 	It works for the most part, but for some reason will not work with all groups.
 	When trying to use this on specific groups ROBLOX will error on the first request.
-	[LINE 72]
 	
 	For example:
 	/getPlayers.php?group=18&rank=255
@@ -49,7 +48,7 @@
 		}
 		return $array;
 	}
-	function getPlayers($raw,$group,$rank) {
+	function getPlayers($ranks,$raw,$group,$rank) {
 		$players = array();
 		$url = "http://www.roblox.com/Groups/group.aspx?gid=$group";
 		$curl = curl_init($url);
@@ -60,7 +59,7 @@
 		$nextPost = getFullPostArray(substr($response,curl_getinfo($curl,CURLINFO_HEADER_SIZE)),
 			array(
 				'__EVENTTARGET' => 'ctl00$cphRoblox$rbxGroupRoleSetMembersPane$dlRolesetList',
-				'ctl00$cphRoblox$rbxGroupRoleSetMembersPane$dlRolesetList' => getRoleSet($rank)
+				'ctl00$cphRoblox$rbxGroupRoleSetMembersPane$dlRolesetList' => getRoleSet($ranks,$rank)
 			)
 		);
 		// Set rank to search
@@ -102,17 +101,17 @@
 	}
 	if (isset($_GET['group'])) {
 		$group = $_GET['group'];
-		$ranks = getRoleSets($group);
+		list($ranks,$roles) = getRoleSets($group);
 	}
 	if (isset($_GET['getAll'])) {
 		$group = $_GET['getAll'];
-		$ranks = getRoleSets($_GET['getAll']);
+		list($ranks,$roles) = getRoleSets($_GET['getAll']);
 		$all = array();
 		foreach ($ranks as $rank=>$id) {
-			$all = array_merge($all,getPlayers($raw,$group,$rank));
+			$all = array_merge($all,getPlayers($ranks,$raw,$group,$rank));
 		}
 		echo json_encode($all);
 	} else if (isset($_GET['rank'])) {
-		echo json_encode(getPlayers($raw,$group,$_GET['rank']));
+		echo json_encode(getPlayers($ranks,$raw,$group,$_GET['rank']));
 	}
 ?>
