@@ -54,19 +54,22 @@
 		$start = time();
 		$url = "http://www.roblox.com/Groups/group.aspx?gid=$group";
 		$curl = curl_init($url);
+		// Start off by just getting the page
+		// We need the correct validation before sending other requests
 		curl_setopt_array($curl,array(
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_USERAGENT => 'Mozilla' // For some reason I have to do this...
 		));
 		$response = curl_exec($curl);
+		// Include __VIEWSTATE, __EVENTVALIDATION, and __VIEWSTATEGENERATOR in the next post array
+		// Set the rank we want to search from while we're at it
 		$nextPost = getPostArray($response,
 			array(
 				'ctl00$cphRoblox$rbxGroupRoleSetMembersPane$dlRolesetList' => $role,
 				'ctl00$cphRoblox$rbxGroupRoleSetMembersPane$currentRoleSetID' => $role,
-				'__ASYNCPOST' => 'true',
+				'__ASYNCPOST' => 'true', // DELTA
 			)
 		);
-		// Set rank to search
 		curl_setopt_array($curl,array(
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_POST => true,
@@ -76,7 +79,8 @@
 		$doc = new DOMDocument();
 		$doc->loadHTML($response);
 		$find = new DomXPath($doc);
-		foreach($find->query("(//div[contains(@id,'ctl00_cphRoblox_rbxGroupRoleSetMembersPane_dlUsers_Footer_ctl01_Div1')]//div[contains(@class,'paging_pagenums_container')])[1]")/* Find the number of pages */ as $node) {
+		// Do a dance to get the number of pages
+		foreach($find->query("(//div[contains(@id,'ctl00_cphRoblox_rbxGroupRoleSetMembersPane_dlUsers_Footer_ctl01_Div1')]//div[contains(@class,'paging_pagenums_container')])[1]") as $node) {
 			$pages = $node->textContent;
 		}
 		if (!isset($pages)) {
@@ -93,13 +97,14 @@
 				break;
 			}
 			$players = getPlayersOnPage($response,$players,$limit);
+			// __VIEWSTATE and __EVENTVALIDATION are not updated as inputs, rather some weird format I don't recognize
 			preg_match('#\|__VIEWSTATE\|(.*?)\|.*\|__EVENTVALIDATION\|(.*?)\|#',$response,$inputs);
 			$nextPost = array(
 				'__VIEWSTATE' => $inputs[1],
 				'__EVENTVALIDATION' => $inputs[2],
 				'__ASYNCPOST' => 'true',
 				'ctl00$cphRoblox$rbxGroupRoleSetMembersPane$currentRoleSetID' => $role,
-				'ctl00$cphRoblox$rbxGroupRoleSetMembersPane$dlUsers_Footer$ctl01$HiddenInputButton' => '',
+				'ctl00$cphRoblox$rbxGroupRoleSetMembersPane$dlUsers_Footer$ctl01$HiddenInputButton' => '', // For some reason this is required
 				'ctl00$cphRoblox$rbxGroupRoleSetMembersPane$dlUsers_Footer$ctl01$PageTextBox' => $i+1 // Next page
 			);
 			curl_setopt_array($curl,array(
