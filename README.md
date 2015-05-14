@@ -20,7 +20,7 @@ Can accept or deny a user into a group by their username.
 This API can shout a message in a group.
 
 <b>getPlayers.php</b>
-Miscellaneous non-action API that can get users in a group based on their rank (or all users) and exports the username and userId in json format. There is one very specific known issue (read comment in the file).
+Miscellaneous non-action API that can get users in a group based on their rank (or all users) and exports the username and userId in json format.
 
 <b>message.php</b>
 Miscellaneous API that can send messages to other users.
