@@ -8,7 +8,7 @@
 		rank: Which rank you want to index
 		getAll: Indexes all ranks of the group ID
 		raw: Set this to false and it shows get time and player count
-		online: Set this to true and it only gets players that are online.
+		online: Set this to true and it only gets online players
 		limit: Limits number of players indexed PER RANK (won't limit everything in get all; -1 for no limit, which is default)
 	Examples:
 		/getPlayers.php?group=18&rank=255
@@ -32,24 +32,28 @@
 	libxml_use_internal_errors(true); // Hide DomDocument parse warnings
 	set_time_limit(0); // May take a while, don't want it to time out!
 	$raw = array_key_exists('raw',$_GET) && $_GET['raw'] == 'false' ? false : true; // (Default to true)
+	$online = array_key_exists('online',$_GET) && $_GET['online'] == 'true' ? true : false; // (Default to false)
 	$limit = array_key_exists('limit',$_GET) ? $_GET['limit'] : -1; // (Default to -1, no limit)
-	function getPlayersOnPage($html,$array,$limit) {
+	function getPlayersOnPage($html,$array,$limit,$online) {
 		$doc = new DOMDocument();
 		$doc->loadHTML($html);
 		$find = new DomXPath($doc);
-		$nodes = $find->query("//span[contains(@class,'Name')]//a[@href]");
-		// Find: Div with particular ID, spans that have the attribute "Name" in that div, and links with href attributes.
+		$nodes = $find->query("//div[contains(@class,'Avatar')]");
 		foreach ($nodes as $node) {
 			if ($limit != -1 && count($array) >= $limit) {
 				break;
 			}
-			preg_match('#\d+#',$node->getAttribute('href'),$matches);
-			// ..User.aspx?ID=(number)
-			array_push($array,array($node->textContent => (int)$matches[0]));
+			$link = $find->query("a",$node)->item(0);
+			$img = $find->query("span/img",$node)->item(0);
+			if (!$online || $img->getAttribute('src') == '../images/online.png') {
+				preg_match('#\d+#',$link->getAttribute('href'),$matches);
+				// ..User.aspx?ID=(number)
+				array_push($array,array($link->getAttribute('title') => (int)$matches[0]));
+			}
 		}
 		return $array;
 	}
-	function getPlayers($ranks,$raw,$group,$rank,$limit) {
+	function getPlayers($ranks,$raw,$group,$rank,$limit,$online) {
 		$players = array();
 		$role = getRoleSet($ranks,$rank);
 		$start = time();
@@ -97,7 +101,7 @@
 			if ($limit != -1 && count($players) >= $limit) {
 				break;
 			}
-			$players = getPlayersOnPage($response,$players,$limit);
+			$players = getPlayersOnPage($response,$players,$limit,$online);
 			// __VIEWSTATE and __EVENTVALIDATION are not updated as inputs, rather some weird format I don't recognize
 			preg_match('#\|__VIEWSTATE\|(.*?)\|.*\|__EVENTVALIDATION\|(.*?)\|#',$response,$inputs);
 			$nextPost = array(
@@ -129,10 +133,10 @@
 		list($ranks,$roles) = getRoleSets($_GET['getAll']);
 		$all = array();
 		foreach ($ranks as $rank=>$id) {
-			$all = array_merge($all,getPlayers($ranks,$raw,$group,$rank,$limit));
+			$all = array_merge($all,getPlayers($ranks,$raw,$group,$rank,$limit,$online));
 		}
 		echo json_encode($all);
 	} else if (array_key_exists('rank',$_GET)) {
-		echo json_encode(getPlayers($ranks,$raw,$group,$_GET['rank'],$limit));
+		echo json_encode(getPlayers($ranks,$raw,$group,$_GET['rank'],$limit,$online));
 	}
 ?>
