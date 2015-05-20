@@ -7,7 +7,8 @@
 		group: The group you want to index
 		rank: Which rank you want to index
 		getAll: Indexes all ranks of the group ID
-		raw: Set it to false and it shows get time and player count
+		raw: Set this to false and it shows get time and player count
+		online: Set this to true and it only gets players that are online.
 		limit: Limits number of players indexed PER RANK (won't limit everything in get all; -1 for no limit, which is default)
 	Examples:
 		/getPlayers.php?group=18&rank=255
