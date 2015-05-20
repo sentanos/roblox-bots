@@ -43,8 +43,8 @@
 			if ($limit != -1 && count($array) >= $limit) {
 				break;
 			}
-			$link = $find->query("a",$node)->item(0);
-			$img = $find->query("span/img",$node)->item(0);
+			$link = $find->query('a',$node)->item(0);
+			$img = $find->query('span/img',$node)->item(0);
 			if (!$online || $img->getAttribute('src') == '../images/online.png') {
 				preg_match('#\d+#',$link->getAttribute('href'),$matches);
 				// ..User.aspx?ID=(number)
