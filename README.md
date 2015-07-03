@@ -22,6 +22,9 @@ This API can shout a message in a group.
 <b>getPlayers.php</b>
 Miscellaneous non-action API that can get users in a group based on their rank (or all users) and exports the username and userId in json format.
 
+<b>getPlayersAsync.php</b>
+The same as getPlayers.php except with asynchronous requests and therefore responds much quicker.
+
 <b>message.php</b>
 Miscellaneous API that can send messages to other users.
 
