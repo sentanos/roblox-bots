@@ -28,7 +28,8 @@
 	
 	*This script uses asynchronous requests with curl_multi. This is a lifesaver, the script is exponentially faster but there is a catch:
 	because curl_multi sends multiple requests in a single thread it can eat up a LOT of memory. To prevent PHP from running out of memory, I made a limit to how many requests can be sent at once with curl_multi.
-	This variable (multiLimit) may be set differently on different servers. If your server has a lot of memory you can set it higher. On one of my servers I have to set it to 10 but on a better one I can set nearly up to 1000, experiment with changing it to find what's best for you - if you see errors and missing players that means it was too high for your server.
+	This variable (multiLimit) may be set differently on different servers. If your server has a lot of memory you can set it higher. 
+	On one of my servers I have to set it to 10 but on a better one I can set nearly up to 1000, experiment with changing it to find what's best for you - if you see errors and missing players that means it was too high for your server.
 	
 	A public demo is available on my site, it's pretty fast and can grab 10000 players in 15-20 seconds:
 	http://roblox.herokuapp.com/getPlayersAsync.php
