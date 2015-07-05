@@ -42,7 +42,7 @@
 	$raw = array_key_exists('raw',$_GET) && $_GET['raw'] == 'false' ? false : true; // (Default to true)
 	$online = array_key_exists('online',$_GET) && $_GET['online'] == 'true' ? true : false; // (Default to false)
 	$limit = array_key_exists('limit',$_GET) ? $_GET['limit'] : -1; // (Default to -1, no limit)
-	$multiLimit = 500;
+	$multiLimit = 100;
 	function getPlayersOnPage($html,$array,$limit,$online) {
 		$doc = new DOMDocument();
 		$doc->loadHTML($html);
