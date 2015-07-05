@@ -19,7 +19,7 @@ Can accept or deny a user into a group by their username.
 <b>shout.php</b>
 This API can shout a message in a group.
 
-<b>shout.php</b>
+<b>post.php</b>
 This API can post a message to a group wall.
 
 <b>getPlayers.php</b>
