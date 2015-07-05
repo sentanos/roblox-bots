@@ -1,4 +1,5 @@
 <?php
+	include_once 'Includes/getPostArray.php'
 	function shout($cookie,$group,$msg) {
 		$url = "http://www.roblox.com/My/Groups.aspx?gid=$group";
 		$curl = curl_init($url);
