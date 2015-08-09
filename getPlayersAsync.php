@@ -32,7 +32,7 @@
 	On one of my servers I have to set it to 10 but on a better one I can set nearly up to 1000, experiment with changing it to find what's best for you - if you see errors and missing players that means it was too high for your server.
 	
 	A public demo is available on my site, it's pretty fast and can grab 10000 players in 15-20 seconds:
-	http://roblox.herokuapp.com/getPlayersAsync.php
+	http://roblobots.cf/getPlayersAsync.php
 	
 	*/
 	include_once './roblox-bots-master/Includes/getRoles.php';
