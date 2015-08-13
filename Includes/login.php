@@ -18,6 +18,7 @@
 		curl_setopt_array($curl,array(
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_POST => true,
+			CURLOPT_SSL_VERIFYPEER => false,
 			CURLOPT_POSTFIELDS => json_encode($login),
 			CURLOPT_HTTPHEADER => array(
 				'Content-Type: application/json; charset=utf-8'	
