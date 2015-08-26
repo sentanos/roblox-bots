@@ -34,7 +34,7 @@
 				CURLOPT_COOKIEJAR => $cookie
 			));
 			$response = curl_exec($curl);
-			$nextPost = getPostArray(substr($response,curl_getinfo($curl,CURLINFO_HEADER_SIZE)),
+			$nextPost = getPostArray($response,
 				array(
 					'ctl00$ctl00$cphRoblox$cphMyRobloxContent$JoinRequestsSearchBox' => $username,
 					'ctl00$ctl00$cphRoblox$cphMyRobloxContent$JoinRequestsSearchButton' => 'Search'	
