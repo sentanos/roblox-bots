@@ -1,16 +1,4 @@
 <?php
-	/*
-	
-	This one is longer because ROBLOX doesn't have any type of API for handling join requests.
-	The only way to do it is as a normal user would, by selecting a choice on the group admin page.
-	That also means that you need to input a username instead of a userId (and this is the only case).
-	
-	EDIT: So apparently ROBLOX now does have a join request API...
-	But you need a join request ID, WHICH YOU CAN ONLY GET FROM THE GROUP ADMIN PAGE ANYWYAS.
-	In fact, it's actually more complicated and long now - two big parts have to be included.
-	Way to go, ROBLOX.
-	
-	*/
 	include_once 'Includes/getPostArray.php';
 	include_once 'Includes/http_parse_headers.php';
 	function handleJoinRequest($cookie,$group,$username,$choice/*Accept or Decline - No default here to make sure you know what you're doing*/,$save='hxcsrf.txt',$requestId=-1) {
@@ -34,18 +22,12 @@
 				CURLOPT_COOKIEJAR => $cookie
 			));
 			$response = curl_exec($curl);
-			$nextPost = getPostArray($response,
-				array(
-					'ctl00$ctl00$cphRoblox$cphMyRobloxContent$JoinRequestsSearchBox' => $username,
-					'ctl00$ctl00$cphRoblox$cphMyRobloxContent$JoinRequestsSearchButton' => 'Search'	
-				)
-			);
 			curl_close($curl);
-			$curl = curl_init($url);
+			preg_match('#Roblox\.GroupAdmin\.InitializeGlobalVars\(.*".*", "(.*)", .*\)#', $response, $matches);
+			$searchPath = $matches[1];
+			$curl = curl_init("http://www.roblox.com$searchPath?groupId=$group&username=$username");
 			curl_setopt_array($curl,array(
 				CURLOPT_RETURNTRANSFER => true,
-				CURLOPT_POST => true,
-				CURLOPT_POSTFIELDS => $nextPost,
 				CURLOPT_COOKIEFILE => $cookie,
 				CURLOPT_COOKIEJAR => $cookie
 			));
