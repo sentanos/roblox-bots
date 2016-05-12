@@ -19,7 +19,7 @@ So in case you're making multiple rank changes you'll still get the correct rank
 
 local group = 0
 GetRankInGroup = function(userId,group)
-    return tonumber(game:GetService'HttpService':GetAsync(string.format('http://www.roproxy.tk/Game/LuaWebService/HandleSocialRequest.ashx?method=GetGroupRank&playerid=%d&groupid=%d',userId,group)):match'<.*>(.*)<.*>')
+    return tonumber(game:GetService'HttpService':GetAsync(string.format('http://www.roblox-proxy.cf/Game/LuaWebService/HandleSocialRequest.ashx?method=GetGroupRank&playerid=%d&groupid=%d',userId,group)):match'<.*>(.*)<.*>')
 end
 GetRankChange = function(plr,change)
     local userRank = GetRankInGroup(plr.userId,group)
