@@ -25,7 +25,7 @@
 				return "Settings restrict the system from changing any rank over $rankLimit.";
 			}
 		}
-		$url = "http://www.roblox.com/groups/api/change-member-rank?groupId=$group&newRoleSetId=".getRoleSet($ranks,$rank)."&targetUserId=$userId"; // Get rank URL
+		$url = "https://www.roblox.com/groups/api/change-member-rank?groupId=$group&newRoleSetId=".getRoleSet($ranks,$rank)."&targetUserId=$userId"; // Get rank URL
 		$curl = curl_init($url);
 		curl_setopt_array($curl,array(
 			CURLOPT_HEADER => true,
