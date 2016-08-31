@@ -66,7 +66,7 @@
 		$players = array();
 		$role = getRoleSet($ranks,$rank);
 		$start = time();
-		$url = "http://www.roblox.com/Groups/group.aspx?gid=$group";
+		$url = "https://www.roblox.com/Groups/group.aspx?gid=$group";
 		$curl = curl_init($url);
 		// Start off by just getting the page
 		// We need the correct validation before sending other requests
