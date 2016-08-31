@@ -27,7 +27,7 @@
 		} else {
 			$send = $data;
 		}
-		$curl = curl_init("http://www.roblox.com/Data/Upload.ashx?assetid=$asset");
+		$curl = curl_init("https://www.roblox.com/Data/Upload.ashx?assetid=$asset");
 		curl_setopt_array($curl,array(
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_POST => true,
