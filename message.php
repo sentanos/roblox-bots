@@ -2,7 +2,7 @@
 	include_once 'Includes/http_parse_headers.php';
 	function message($cookie,$id,$subject='None',$body='None',$save='../Private/mxcsrf.txt') {
 		$xcsrf = file_exists($save) ? file_get_contents($save) : '';
-		$curl = curl_init('http://www.roblox.com/messages/send');
+		$curl = curl_init('https://www.roblox.com/messages/send');
 		$send = array(
 			'subject' => $subject,
 			'body' => $body,

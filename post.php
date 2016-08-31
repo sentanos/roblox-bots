@@ -3,7 +3,7 @@
 <?php
 	include_once'Includes/getPostArray.php';
 	function post($cookie,$group,$msg) {
-		$url = "http://www.roblox.com/My/Groups.aspx?gid=$group";
+		$url = "https://www.roblox.com/My/Groups.aspx?gid=$group";
 		$curl = curl_init($url);
 		curl_setopt_array($curl,array(
 			CURLOPT_RETURNTRANSFER => true,
