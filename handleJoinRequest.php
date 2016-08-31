@@ -3,7 +3,7 @@
 	include_once 'Includes/http_parse_headers.php';
 	function handleJoinRequest($cookie,$group,$username,$choice/*Accept or Decline - No default here to make sure you know what you're doing*/,$save='hxcsrf.txt',$requestId=-1) {
 		$xcsrf = file_exists($save) ? file_get_contents($save) : '';
-		$url = "http://www.roblox.com/My/GroupAdmin.aspx?gid=$group";
+		$url = "https://www.roblox.com/My/GroupAdmin.aspx?gid=$group";
 		switch($choice) {
 			case 'Accept':
 				$choiceNumber = 1;
@@ -40,7 +40,7 @@
 				$requestId = $node->getAttribute('data-rbx-join-request');
 			}
 		}
-		$curl = curl_init('http://www.roblox.com/group/handle-join-request');
+		$curl = curl_init('https://www.roblox.com/group/handle-join-request');
 		$post = array(
 			'groupJoinRequestId' => $requestId,
 			'accept' => $choiceNumber==1 ? true : false
