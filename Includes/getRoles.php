@@ -1,7 +1,7 @@
 <?php
 	function getRoleSets($group) {
 		$ranks = array();
-		$roles = json_decode(file_get_contents("http://www.roblox.com/api/groups/$group/RoleSets/"),true);
+		$roles = json_decode(file_get_contents("https://www.roblox.com/api/groups/$group/RoleSets/"),true);
 		foreach($roles as $role => $array) {
 			$ranks[$array['Rank']] = $array['ID'];
 		}
