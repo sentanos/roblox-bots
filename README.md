@@ -1,3 +1,6 @@
+# !!! THIS PROJECT IS NO LONGER MAINTAINED !!!
+I have stopped work on this project in favor of much better bots in node-js. If you want an easy way to set up the server, check out the instructions on my other repository [roblox-js-server](https://github.com/sentanos/roblox-js-server). You don't have to know node.js or even where to set up a server, there is a detailed walkthrough for everything. If you are looking for the actual module to use directly on a node server of your own, I have another open-source module here: [roblox-js](https://github.com/sentanos/roblox-js).
+
 # roblox-bots
 This repository is for ROBLOX Web APIs commonly referred to as bots.
 Mostly consists of group APIs (but includes others).
