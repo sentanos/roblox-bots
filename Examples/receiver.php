@@ -12,7 +12,7 @@
 	if (!$_GET || !array_key_exists('key',$_GET) || $_GET['key'] != $getKey) {
 		die('FAILURE: Incorrect/missing validation key.');
 	}
-	$base = './roblox-bots-master';
+	$base = $_SERVER['DOCUMENT_ROOT'];
 	include_once $base.'/Includes/getRoles.php';
 	include_once $base.'/Includes/login.php';
 	include_once $base.'/Includes/getPostData.php';
