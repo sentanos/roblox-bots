@@ -26,7 +26,7 @@
 			CURLOPT_COOKIEJAR => $cookie
 		));
 		if (curl_exec($curl)) {
-			return "Shouted $msg.";
+			return "New shout from **IFL**:\n $msg.";
 		}
 		return 'Failure';
 	}
